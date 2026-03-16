@@ -1,9 +1,6 @@
 // ─── History page ─────────────────────────────────────────────────────────────
-// CHANGED: loads real history from backend instead of generating mock data.
-// Layout, filters, detail modal — all unchanged.
 
 import { Navbar }         from "@/components/Navbar";
-import { Card }           from "@/components/ui/card";
 import { Button }         from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Search, Download, Eye, Loader2 } from "lucide-react";
@@ -11,15 +8,22 @@ import { AnalysisResults }     from "@/components/AnalysisResults";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { fetchHistory }        from "@/lib/api";
 import type { HistoryEntry }   from "@/lib/api";
+import { motion } from "framer-motion";
 
 const levelColors: Record<string, string> = {
-  high:     "bg-risk-high/15 text-risk-high",
-  medium:   "bg-risk-medium/15 text-risk-medium",
-  low:      "bg-risk-low/15 text-risk-low",
-  critical: "bg-risk-critical/15 text-risk-critical",
+  high:     "bg-[#22c55e]/15 text-[#22c55e]",
+  medium:   "bg-[#facc15]/15 text-[#facc15]",
+  low:      "bg-[#fb923c]/15 text-[#fb923c]",
+  critical: "bg-[#ef4444]/15 text-[#ef4444]",
 };
 
-// Convert a raw history entry into the shape AnalysisResults.tsx needs
+const barColors: Record<string, string> = {
+  high:     "from-[#22c55e] to-[#4ade80]",
+  medium:   "from-[#facc15] to-[#fde047]",
+  low:      "from-[#fb923c] to-[#fdba74]",
+  critical: "from-[#ef4444] to-[#f87171]",
+};
+
 function entryToAnalysis(a: HistoryEntry) {
   const level = (a.level || a.risk_level || "medium") as "high"|"medium"|"low"|"critical";
   const score = a.score ?? a.accuracy_score ?? 0;
@@ -95,34 +99,40 @@ export default function History() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0f0f12] relative">
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-[#d63384]/5 blur-[140px] pointer-events-none" />
+
       <Navbar />
-      <div className="container mx-auto pt-24 pb-16 px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="font-heading text-3xl font-bold">Analysis History</h1>
-          <Button variant="outline" size="sm" onClick={handleExport}>
+      <div className="container mx-auto pt-28 pb-16 px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-8"
+        >
+          <h1 className="font-heading text-4xl font-bold text-white tracking-[-0.02em]">Analysis History</h1>
+          <Button className="btn-secondary" size="sm" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />Export CSV
           </Button>
-        </div>
+        </motion.div>
 
-        {/* Filters — unchanged layout */}
+        {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-6">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search analyses..."
-              className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-[#d63384]/50 focus:border-[#d63384]/30 transition-all"
             />
           </div>
-          <div className="flex rounded-lg border border-border overflow-hidden">
+          <div className="flex rounded-xl bg-white/[0.04] p-1 border border-white/[0.08]">
             {["all","high","medium","low","critical"].map(l => (
               <button
                 key={l}
                 onClick={() => setFilter(l)}
-                className={`px-3 py-2 text-xs font-medium capitalize transition-colors ${
-                  filter === l ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"
+                className={`px-4 py-2 text-xs font-medium capitalize transition-all duration-200 rounded-[10px] ${
+                  filter === l ? "btn-primary text-white" : "text-white/40 hover:text-white/70"
                 }`}
               >
                 {l}
@@ -131,18 +141,18 @@ export default function History() {
           </div>
         </div>
 
-        {/* Table — unchanged layout */}
-        <Card className="bg-card border-border overflow-hidden">
+        {/* Table */}
+        <div className="glass-card overflow-hidden">
           {loading && (
-            <div className="flex justify-center py-16">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <div className="flex justify-center py-20">
+              <Loader2 className="h-6 w-6 animate-spin text-[#ff4da6]" />
             </div>
           )}
 
           {error && (
-            <div className="text-center py-12 text-muted-foreground text-sm">
+            <div className="text-center py-16 text-white/40 text-sm">
               Could not load history — check that{" "}
-              <code className="bg-muted px-1 rounded text-xs">VITE_API_URL</code> is set correctly.
+              <code className="bg-white/[0.06] px-1.5 py-0.5 rounded text-[#ff4da6] text-xs">VITE_API_URL</code> is set correctly.
             </div>
           )}
 
@@ -150,9 +160,9 @@ export default function History() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-muted/30">
+                  <tr className="border-b border-white/[0.06]">
                     {["Timestamp","Text Preview","Confidence","Risk","Actions"].map(h => (
-                      <th key={h} className="px-4 py-3 text-left text-muted-foreground font-medium">{h}</th>
+                      <th key={h} className="px-6 py-4 text-left text-white/30 font-medium text-xs uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -163,36 +173,33 @@ export default function History() {
                     const text  = a.text || a.analyzed_text || "";
                     const date  = a.timestamp || a.created_at || "";
                     const emoji = { high:"✅", medium:"⚠️", low:"🔍", critical:"🚨" }[level] || "⚠️";
+                    const barColor = barColors[level] || barColors.medium;
                     return (
-                      <tr key={i} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
-                        <td className="px-4 py-3 text-muted-foreground whitespace-nowrap text-xs">
+                      <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                        <td className="px-6 py-4 text-white/30 whitespace-nowrap text-xs">
                           {new Date(date).toLocaleString()}
                         </td>
-                        <td className="px-4 py-3 max-w-[300px] truncate">{text.slice(0,100)}…</td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
+                        <td className="px-6 py-4 max-w-[300px] truncate text-white/70">{text.slice(0,100)}…</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-20 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                               <div
-                                className={`h-full rounded-full ${
-                                  level === "high" ? "bg-risk-high" :
-                                  level === "medium" ? "bg-risk-medium" :
-                                  level === "low" ? "bg-risk-low" : "bg-risk-critical"
-                                }`}
+                                className={`h-full rounded-full bg-gradient-to-r ${barColor}`}
                                 style={{ width: `${score}%` }}
                               />
                             </div>
-                            <span className="text-xs">{score}</span>
+                            <span className="text-xs text-white font-medium">{score}</span>
                           </div>
                         </td>
-                        <td className="px-4 py-3">
-                          <span className={`text-xs px-2 py-1 rounded-full capitalize font-medium ${levelColors[level] || ""}`}>
+                        <td className="px-6 py-4">
+                          <span className={`text-xs px-3 py-1 rounded-full capitalize font-medium ${levelColors[level] || ""}`}>
                             {emoji} {level}
                           </span>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-6 py-4">
                           <button
                             onClick={() => setSelected(a)}
-                            className="p-1.5 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                            className="p-2 rounded-lg hover:bg-white/[0.06] transition-colors text-white/30 hover:text-white"
                           >
                             <Eye className="h-4 w-4" />
                           </button>
@@ -203,37 +210,37 @@ export default function History() {
                 </tbody>
               </table>
               {filtered.length === 0 && (
-                <div className="text-center py-12 text-muted-foreground text-sm">
+                <div className="text-center py-16 text-white/40 text-sm">
                   {allHistory.length === 0
-                    ? <><span>No analyses yet. </span><a href="/demo" className="text-primary hover:underline">Run your first one →</a></>
+                    ? <><span>No analyses yet. </span><a href="/demo" className="text-[#ff4da6] hover:underline">Run your first one →</a></>
                     : "No analyses match your filters."
                   }
                 </div>
               )}
             </div>
           )}
-        </Card>
+        </div>
 
         {!loading && filtered.length > 0 && (
-          <p className="text-xs text-muted-foreground text-right mt-2">
+          <p className="text-xs text-white/30 text-right mt-3">
             Showing {filtered.length} of {allHistory.length} analyses
           </p>
         )}
       </div>
 
-      {/* Detail modal — unchanged */}
+      {/* Detail modal */}
       <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-card border-border">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto glass-card !bg-[#0f0f12]/95 backdrop-blur-2xl border-white/[0.1]">
           <DialogHeader>
-            <DialogTitle className="font-heading">Analysis Details</DialogTitle>
+            <DialogTitle className="font-heading text-white">Analysis Details</DialogTitle>
           </DialogHeader>
           {selected && (
             <div className="space-y-4">
-              <Card className="p-4 bg-muted/30 border-border">
-                <p className="text-sm">{selected.text || selected.analyzed_text}</p>
-              </Card>
+              <div className="glass-card p-4">
+                <p className="text-sm text-white/70">{selected.text || selected.analyzed_text}</p>
+              </div>
               <AnalysisResults analysis={entryToAnalysis(selected) as any} profile="professor" />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-white/30">
                 Analyzed: {new Date(selected.timestamp || selected.created_at || "").toLocaleString()}
                 {(selected.analysis_id || selected.id) && ` • ID: ${selected.analysis_id || selected.id}`}
               </p>
