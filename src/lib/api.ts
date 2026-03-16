@@ -10,7 +10,7 @@
 // The HF Space URL format is:
 //   https://YOUR_HF_USERNAME-SPACE_NAME.hf.space
 
-const API_BASE = "https://huggingface.co/spaces/Rithanya918/Aros.hf.space";
+const API_BASE = "https://rithanya918-aros.hf.space";
 
 // ── Types that match what the Python backend returns ──────────────────────────
 
