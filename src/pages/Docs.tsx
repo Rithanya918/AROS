@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar";
-import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { Book, Code, HelpCircle, Layers, Zap, Shield } from "lucide-react";
+import { motion } from "framer-motion";
 
 const sections = [
   {
@@ -173,9 +173,11 @@ export default function Docs() {
   const currentSub = currentSection.subsections[activeSubIndex];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0f0f12] relative">
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-[#d63384]/5 blur-[140px] pointer-events-none" />
+
       <Navbar />
-      <div className="container mx-auto pt-24 pb-16 px-4">
+      <div className="container mx-auto pt-28 pb-16 px-4 relative z-10">
         <div className="flex gap-8">
           {/* Sidebar */}
           <aside className="hidden md:block w-64 shrink-0">
@@ -184,21 +186,21 @@ export default function Docs() {
                 <div key={s.id}>
                   <button
                     onClick={() => { setActiveSection(s.id); setActiveSubIndex(0); }}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      activeSection === s.id ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-[10px] text-sm font-medium transition-all duration-200 ${
+                      activeSection === s.id ? "bg-white/[0.08] text-white" : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
                     }`}
                   >
-                    <s.icon className="h-4 w-4" />
+                    <s.icon className="h-4 w-4" style={{ color: activeSection === s.id ? '#ff4da6' : undefined }} />
                     {s.title}
                   </button>
                   {activeSection === s.id && (
-                    <div className="ml-6 mt-1 space-y-0.5">
+                    <div className="ml-7 mt-1 space-y-0.5 border-l border-white/[0.08] pl-3">
                       {s.subsections.map((sub, i) => (
                         <button
                           key={i}
                           onClick={() => setActiveSubIndex(i)}
-                          className={`block w-full text-left px-3 py-1.5 rounded text-xs transition-colors ${
-                            activeSubIndex === i ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                          className={`block w-full text-left px-3 py-1.5 rounded-lg text-xs transition-all ${
+                            activeSubIndex === i ? "text-[#ff4da6]" : "text-white/30 hover:text-white/60"
                           }`}
                         >
                           {sub.title}
@@ -218,7 +220,7 @@ export default function Docs() {
               <select
                 value={activeSection}
                 onChange={e => { setActiveSection(e.target.value); setActiveSubIndex(0); }}
-                className="w-full p-2 rounded-lg border border-border bg-card text-sm"
+                className="w-full p-3 rounded-xl border border-white/[0.08] bg-white/[0.04] text-sm text-white"
               >
                 {sections.map(s => (
                   <option key={s.id} value={s.id}>{s.title}</option>
@@ -226,20 +228,27 @@ export default function Docs() {
               </select>
             </div>
 
-            <Card className="p-8 bg-card border-border">
-              <div className="prose prose-invert prose-sm max-w-none">
-                {currentSub.content.split("\n").map((line, i) => {
-                  if (line.startsWith("## ")) return <h2 key={i} className="font-heading text-2xl font-bold mb-4 mt-0 text-foreground">{line.replace("## ", "")}</h2>;
-                  if (line.startsWith("### ")) return <h3 key={i} className="font-heading text-lg font-semibold mb-2 mt-6 text-foreground">{line.replace("### ", "")}</h3>;
-                  if (line.startsWith("```")) return <div key={i} className="bg-muted rounded-lg px-4 py-2 font-mono text-xs my-2 text-foreground overflow-x-auto">{line.replace(/```\w*/, "")}</div>;
-                  if (line.startsWith("- ")) return <li key={i} className="text-muted-foreground ml-4 mb-1">{line.replace("- ", "")}</li>;
-                  if (line.startsWith("**Q:")) return <p key={i} className="font-semibold mt-4 text-foreground">{line.replace(/\*\*/g, "")}</p>;
-                  if (line.startsWith("A:")) return <p key={i} className="text-muted-foreground mb-3">{line}</p>;
-                  if (line.trim() === "") return <br key={i} />;
-                  return <p key={i} className="text-muted-foreground mb-2">{line}</p>;
-                })}
+            <motion.div
+              key={`${activeSection}-${activeSubIndex}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="glass-card p-8">
+                <div className="prose prose-invert prose-sm max-w-none">
+                  {currentSub.content.split("\n").map((line, i) => {
+                    if (line.startsWith("## ")) return <h2 key={i} className="font-heading text-2xl font-bold mb-4 mt-0 text-white tracking-[-0.02em]">{line.replace("## ", "")}</h2>;
+                    if (line.startsWith("### ")) return <h3 key={i} className="font-heading text-lg font-semibold mb-2 mt-6 text-white">{line.replace("### ", "")}</h3>;
+                    if (line.startsWith("```")) return <div key={i} className="bg-white/[0.04] border border-white/[0.06] rounded-xl px-5 py-3 font-mono text-xs my-3 text-[#ff4da6]/80 overflow-x-auto">{line.replace(/```\w*/, "")}</div>;
+                    if (line.startsWith("- ")) return <li key={i} className="text-white/50 ml-4 mb-1.5">{line.replace("- ", "")}</li>;
+                    if (line.startsWith("**Q:")) return <p key={i} className="font-semibold mt-5 text-white">{line.replace(/\*\*/g, "")}</p>;
+                    if (line.startsWith("A:")) return <p key={i} className="text-white/50 mb-4">{line}</p>;
+                    if (line.trim() === "") return <br key={i} />;
+                    return <p key={i} className="text-white/50 mb-2 leading-relaxed">{line}</p>;
+                  })}
+                </div>
               </div>
-            </Card>
+            </motion.div>
 
             {/* Nav buttons */}
             <div className="flex justify-between mt-6">
@@ -254,7 +263,7 @@ export default function Docs() {
                     }
                   }
                 }}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm text-white/30 hover:text-[#ff4da6] transition-colors"
               >
                 ← Previous
               </button>
@@ -269,7 +278,7 @@ export default function Docs() {
                     }
                   }
                 }}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm text-white/30 hover:text-[#ff4da6] transition-colors"
               >
                 Next →
               </button>

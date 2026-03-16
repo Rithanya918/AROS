@@ -1,22 +1,23 @@
 // ─── Dashboard page ───────────────────────────────────────────────────────────
-// CHANGED: stats and recent activity now come from the backend API.
-// Layout, styling, and all components are unchanged.
 
 import { Navbar }      from "@/components/Navbar";
-import { Card }        from "@/components/ui/card";
 import { Button }      from "@/components/ui/button";
-import { BarChart3, Shield, AlertTriangle, Activity, ArrowRight, Loader2 } from "lucide-react";
+import { BarChart3, Shield, AlertTriangle, Activity, ArrowRight, Loader2, TrendingUp } from "lucide-react";
 import { Link }        from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchHistory }        from "@/lib/api";
 import type { HistoryEntry }   from "@/lib/api";
+import { motion } from "framer-motion";
 
 const levelColors = {
-  high:     "bg-risk-high/15 text-risk-high",
-  medium:   "bg-risk-medium/15 text-risk-medium",
-  low:      "bg-risk-low/15 text-risk-low",
-  critical: "bg-risk-critical/15 text-risk-critical",
+  high:     "bg-[#22c55e]/15 text-[#22c55e]",
+  medium:   "bg-[#facc15]/15 text-[#facc15]",
+  low:      "bg-[#fb923c]/15 text-[#fb923c]",
+  critical: "bg-[#ef4444]/15 text-[#ef4444]",
 } as const;
+
+const statIcons = [BarChart3, AlertTriangle, Shield, Activity];
+const statAccents = ["#ff4da6", "#ef4444", "#22c55e", "#facc15"];
 
 export default function Dashboard() {
   const [history,  setHistory]  = useState<HistoryEntry[]>([]);
@@ -35,7 +36,6 @@ export default function Dashboard() {
       });
   }, []);
 
-  // Derive stats from real history
   const total      = history.length;
   const hallucinations = history.filter(h => (h.level || h.risk_level) === "critical").length;
   const avgScore   = total > 0
@@ -43,67 +43,86 @@ export default function Dashboard() {
     : 0;
 
   const stats = [
-    { label: "Analyses",             value: loading ? "…" : String(total),          icon: BarChart3,    change: "this session" },
-    { label: "Hallucinations Caught", value: loading ? "…" : String(hallucinations), icon: AlertTriangle, change: "critical risk" },
-    { label: "Avg Accuracy",          value: loading ? "…" : `${avgScore}%`,         icon: Shield,        change: "across all runs" },
-    { label: "Backend Status",        value: error   ? "Offline" : "Active",         icon: Activity,      change: "GPT-4o powered" },
+    { label: "Analyses Run",          value: loading ? "…" : String(total),          change: "+12 today" },
+    { label: "Hallucinations Caught", value: loading ? "…" : String(hallucinations), change: "critical risk" },
+    { label: "Avg Accuracy",          value: loading ? "…" : `${avgScore}%`,         change: "across all runs" },
+    { label: "Backend Status",        value: error   ? "Offline" : "Active",         change: "GPT-4o powered" },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0f0f12] relative">
+      <div className="absolute top-0 left-1/3 w-[600px] h-[400px] rounded-full bg-[#d63384]/6 blur-[160px] pointer-events-none" />
+
       <Navbar />
-      <div className="container mx-auto pt-24 pb-16 px-4">
-        <div className="flex items-center justify-between mb-8">
+      <div className="container mx-auto pt-28 pb-16 px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-10"
+        >
           <div>
-            <h1 className="font-heading text-3xl font-bold">Welcome back</h1>
-            <p className="text-muted-foreground">Your AROS activity overview</p>
+            <h1 className="font-heading text-4xl font-bold text-white tracking-[-0.02em]">Welcome back</h1>
+            <p className="text-white/40 mt-1">Your AROS activity overview</p>
           </div>
           <Link to="/demo">
-            <Button className="gradient-primary text-primary-foreground border-0">
+            <Button className="btn-primary border-0 px-6">
               New Analysis <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Stats grid — same layout, live data */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {stats.map((s, i) => (
-            <Card key={i} className="p-5 bg-card border-border">
-              <div className="flex items-center justify-between mb-3">
-                <s.icon className="h-5 w-5 text-primary" />
-                <span className="text-xs text-muted-foreground">{s.change}</span>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <div className="glass-card p-6 hover:border-white/[0.15] transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  {(() => {
+                    const Icon = statIcons[i];
+                    return <Icon className="h-5 w-5" style={{ color: statAccents[i] }} />;
+                  })()}
+                  <div className="flex items-center gap-1 text-xs text-white/30">
+                    <TrendingUp className="h-3 w-3" />
+                    {s.change}
+                  </div>
+                </div>
+                <div className="text-3xl font-heading font-bold text-white mb-1">
+                  {loading ? <Loader2 className="h-5 w-5 animate-spin" style={{ color: statAccents[i] }} /> : s.value}
+                </div>
+                <div className="text-xs text-white/40 uppercase tracking-wider">{s.label}</div>
               </div>
-              <div className="text-2xl font-heading font-bold">
-                {loading ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : s.value}
-              </div>
-              <div className="text-sm text-muted-foreground">{s.label}</div>
-            </Card>
+            </motion.div>
           ))}
         </div>
 
-        {/* Recent Activity — same layout, live data */}
-        <Card className="p-6 bg-card border-border">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-heading font-semibold text-lg">Recent Activity</h2>
-            <Link to="/history" className="text-sm text-primary hover:underline">View all</Link>
+        {/* Recent Activity */}
+        <div className="glass-card overflow-hidden">
+          <div className="flex items-center justify-between p-6 pb-4">
+            <h2 className="font-heading font-semibold text-lg text-white">Recent Activity</h2>
+            <Link to="/history" className="text-sm text-[#ff4da6] hover:text-[#d63384] transition-colors">View all →</Link>
           </div>
 
           {loading && (
-            <div className="flex justify-center py-10">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <div className="flex justify-center py-16">
+              <Loader2 className="h-6 w-6 animate-spin text-[#ff4da6]" />
             </div>
           )}
 
           {error && (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              Could not load history — check that <code className="bg-muted px-1 rounded text-xs">VITE_API_URL</code> is set.
+            <p className="text-sm text-white/40 text-center py-12 px-6">
+              Could not load history — check that <code className="bg-white/[0.06] px-1.5 py-0.5 rounded text-[#ff4da6] text-xs">VITE_API_URL</code> is set.
             </p>
           )}
 
           {!loading && !error && history.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="text-sm text-white/40 text-center py-12">
               No analyses yet.{" "}
-              <Link to="/demo" className="text-primary hover:underline">Run your first one →</Link>
+              <Link to="/demo" className="text-[#ff4da6] hover:underline">Run your first one →</Link>
             </p>
           )}
 
@@ -111,11 +130,11 @@ export default function Dashboard() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border text-left">
-                    <th className="pb-3 text-muted-foreground font-medium">Date</th>
-                    <th className="pb-3 text-muted-foreground font-medium">Text Preview</th>
-                    <th className="pb-3 text-muted-foreground font-medium">Score</th>
-                    <th className="pb-3 text-muted-foreground font-medium">Risk</th>
+                  <tr className="border-b border-white/[0.06] text-left">
+                    <th className="px-6 pb-3 text-white/30 font-medium text-xs uppercase tracking-wider">Date</th>
+                    <th className="px-6 pb-3 text-white/30 font-medium text-xs uppercase tracking-wider">Text Preview</th>
+                    <th className="px-6 pb-3 text-white/30 font-medium text-xs uppercase tracking-wider">Score</th>
+                    <th className="px-6 pb-3 text-white/30 font-medium text-xs uppercase tracking-wider">Risk</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,14 +144,14 @@ export default function Dashboard() {
                     const text  = a.text || a.analyzed_text || "";
                     const date  = a.timestamp || a.created_at || "";
                     return (
-                      <tr key={i} className="border-b border-border/50 last:border-0">
-                        <td className="py-3 text-muted-foreground whitespace-nowrap text-xs">
+                      <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                        <td className="px-6 py-4 text-white/30 whitespace-nowrap text-xs">
                           {new Date(date).toLocaleString()}
                         </td>
-                        <td className="py-3 max-w-[300px] truncate">{text.slice(0, 80)}…</td>
-                        <td className="py-3 font-semibold">{score}</td>
-                        <td className="py-3">
-                          <span className={`text-xs px-2 py-1 rounded-full capitalize font-medium ${levelColors[level] || levelColors.medium}`}>
+                        <td className="px-6 py-4 max-w-[300px] truncate text-white/70">{text.slice(0, 80)}…</td>
+                        <td className="px-6 py-4 font-semibold text-white">{score}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-xs px-3 py-1 rounded-full capitalize font-medium ${levelColors[level] || levelColors.medium}`}>
                             {level}
                           </span>
                         </td>
@@ -143,28 +162,28 @@ export default function Dashboard() {
               </table>
             </div>
           )}
-        </Card>
+        </div>
 
-        {/* Quick Actions — unchanged */}
+        {/* Quick Actions */}
         <div className="grid md:grid-cols-2 gap-4 mt-8">
-          <Card className="p-6 bg-card border-border flex items-center justify-between">
+          <div className="glass-card p-6 flex items-center justify-between hover:border-white/[0.15] transition-all duration-300">
             <div>
-              <h3 className="font-heading font-semibold">Hugging Face Space</h3>
-              <p className="text-sm text-muted-foreground">Your backend is running on HF Spaces</p>
+              <h3 className="font-heading font-semibold text-white">Hugging Face Space</h3>
+              <p className="text-sm text-white/40 mt-1">Your backend is running on HF Spaces</p>
             </div>
-            <Button variant="outline" size="sm" asChild>
+            <Button className="btn-secondary" size="sm" asChild>
               <a href={import.meta.env.VITE_API_URL || "#"} target="_blank" rel="noopener noreferrer">
                 Open
               </a>
             </Button>
-          </Card>
-          <Card className="p-6 bg-card border-border flex items-center justify-between">
+          </div>
+          <div className="glass-card p-6 flex items-center justify-between hover:border-white/[0.15] transition-all duration-300">
             <div>
-              <h3 className="font-heading font-semibold">Documentation</h3>
-              <p className="text-sm text-muted-foreground">Learn how to use AROS effectively</p>
+              <h3 className="font-heading font-semibold text-white">Documentation</h3>
+              <p className="text-sm text-white/40 mt-1">Learn how to use AROS effectively</p>
             </div>
-            <Link to="/docs"><Button variant="outline" size="sm">View Docs</Button></Link>
-          </Card>
+            <Link to="/docs"><Button className="btn-secondary" size="sm">View Docs</Button></Link>
+          </div>
         </div>
       </div>
     </div>
