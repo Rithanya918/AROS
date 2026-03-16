@@ -10,7 +10,7 @@
 // The HF Space URL format is:
 //   https://YOUR_HF_USERNAME-SPACE_NAME.hf.space
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_BASE = "https://huggingface.co/spaces/Rithanya918/Aros.hf.space";
 
 // ── Types that match what the Python backend returns ──────────────────────────
 
