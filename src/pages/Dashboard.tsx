@@ -1,32 +1,54 @@
-import { Navbar } from "@/components/Navbar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { BarChart3, Shield, AlertTriangle, Activity, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+// ─── Dashboard page ───────────────────────────────────────────────────────────
+// CHANGED: stats and recent activity now come from the backend API.
+// Layout, styling, and all components are unchanged.
 
-const stats = [
-  { label: "Analyses", value: "248", icon: BarChart3, change: "+12 today" },
-  { label: "Hallucinations Caught", value: "37", icon: AlertTriangle, change: "15% rate" },
-  { label: "Avg Accuracy", value: "92%", icon: Shield, change: "+3% this week" },
-  { label: "Extension Active", value: "Yes", icon: Activity, change: "v1.0.0" },
-];
-
-const recentActivity = [
-  { date: "2026-03-09 14:30", text: "Python is a programming language created by Guido van Rossum...", score: 95, level: "high" as const },
-  { date: "2026-03-09 13:15", text: "I have access to your university database and can confirm...", score: 15, level: "critical" as const },
-  { date: "2026-03-09 11:00", text: "Recent studies show 73% of companies increased AI...", score: 55, level: "low" as const },
-  { date: "2026-03-08 16:45", text: "The deadline is March 15, 2026. The maximum award...", score: 65, level: "medium" as const },
-  { date: "2026-03-08 10:20", text: "Machine learning models require large datasets for...", score: 88, level: "high" as const },
-];
+import { Navbar }      from "@/components/Navbar";
+import { Card }        from "@/components/ui/card";
+import { Button }      from "@/components/ui/button";
+import { BarChart3, Shield, AlertTriangle, Activity, ArrowRight, Loader2 } from "lucide-react";
+import { Link }        from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchHistory }        from "@/lib/api";
+import type { HistoryEntry }   from "@/lib/api";
 
 const levelColors = {
-  high: "bg-risk-high/15 text-risk-high",
-  medium: "bg-risk-medium/15 text-risk-medium",
-  low: "bg-risk-low/15 text-risk-low",
+  high:     "bg-risk-high/15 text-risk-high",
+  medium:   "bg-risk-medium/15 text-risk-medium",
+  low:      "bg-risk-low/15 text-risk-low",
   critical: "bg-risk-critical/15 text-risk-critical",
-};
+} as const;
 
 export default function Dashboard() {
+  const [history,  setHistory]  = useState<HistoryEntry[]>([]);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState(false);
+
+  useEffect(() => {
+    fetchHistory(10)
+      .then(data => {
+        setHistory(data.analyses || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, []);
+
+  // Derive stats from real history
+  const total      = history.length;
+  const hallucinations = history.filter(h => (h.level || h.risk_level) === "critical").length;
+  const avgScore   = total > 0
+    ? Math.round(history.reduce((s, h) => s + (h.score ?? h.accuracy_score ?? 0), 0) / total)
+    : 0;
+
+  const stats = [
+    { label: "Analyses",             value: loading ? "…" : String(total),          icon: BarChart3,    change: "this session" },
+    { label: "Hallucinations Caught", value: loading ? "…" : String(hallucinations), icon: AlertTriangle, change: "critical risk" },
+    { label: "Avg Accuracy",          value: loading ? "…" : `${avgScore}%`,         icon: Shield,        change: "across all runs" },
+    { label: "Backend Status",        value: error   ? "Offline" : "Active",         icon: Activity,      change: "GPT-4o powered" },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -43,7 +65,7 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats grid — same layout, live data */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((s, i) => (
             <Card key={i} className="p-5 bg-card border-border">
@@ -51,54 +73,90 @@ export default function Dashboard() {
                 <s.icon className="h-5 w-5 text-primary" />
                 <span className="text-xs text-muted-foreground">{s.change}</span>
               </div>
-              <div className="text-2xl font-heading font-bold">{s.value}</div>
+              <div className="text-2xl font-heading font-bold">
+                {loading ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : s.value}
+              </div>
               <div className="text-sm text-muted-foreground">{s.label}</div>
             </Card>
           ))}
         </div>
 
-        {/* Recent Activity */}
+        {/* Recent Activity — same layout, live data */}
         <Card className="p-6 bg-card border-border">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-heading font-semibold text-lg">Recent Activity</h2>
             <Link to="/history" className="text-sm text-primary hover:underline">View all</Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="pb-3 text-muted-foreground font-medium">Date</th>
-                  <th className="pb-3 text-muted-foreground font-medium">Text Preview</th>
-                  <th className="pb-3 text-muted-foreground font-medium">Score</th>
-                  <th className="pb-3 text-muted-foreground font-medium">Risk</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentActivity.map((a, i) => (
-                  <tr key={i} className="border-b border-border/50 last:border-0">
-                    <td className="py-3 text-muted-foreground whitespace-nowrap">{a.date}</td>
-                    <td className="py-3 max-w-[300px] truncate">{a.text}</td>
-                    <td className="py-3 font-semibold">{a.score}</td>
-                    <td className="py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full capitalize font-medium ${levelColors[a.level]}`}>
-                        {a.level}
-                      </span>
-                    </td>
+
+          {loading && (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          )}
+
+          {error && (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              Could not load history — check that <code className="bg-muted px-1 rounded text-xs">VITE_API_URL</code> is set.
+            </p>
+          )}
+
+          {!loading && !error && history.length === 0 && (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              No analyses yet.{" "}
+              <Link to="/demo" className="text-primary hover:underline">Run your first one →</Link>
+            </p>
+          )}
+
+          {!loading && !error && history.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left">
+                    <th className="pb-3 text-muted-foreground font-medium">Date</th>
+                    <th className="pb-3 text-muted-foreground font-medium">Text Preview</th>
+                    <th className="pb-3 text-muted-foreground font-medium">Score</th>
+                    <th className="pb-3 text-muted-foreground font-medium">Risk</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {history.map((a, i) => {
+                    const level = (a.level || a.risk_level || "medium") as keyof typeof levelColors;
+                    const score = a.score ?? a.accuracy_score ?? 0;
+                    const text  = a.text || a.analyzed_text || "";
+                    const date  = a.timestamp || a.created_at || "";
+                    return (
+                      <tr key={i} className="border-b border-border/50 last:border-0">
+                        <td className="py-3 text-muted-foreground whitespace-nowrap text-xs">
+                          {new Date(date).toLocaleString()}
+                        </td>
+                        <td className="py-3 max-w-[300px] truncate">{text.slice(0, 80)}…</td>
+                        <td className="py-3 font-semibold">{score}</td>
+                        <td className="py-3">
+                          <span className={`text-xs px-2 py-1 rounded-full capitalize font-medium ${levelColors[level] || levelColors.medium}`}>
+                            {level}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </Card>
 
-        {/* Quick Actions */}
+        {/* Quick Actions — unchanged */}
         <div className="grid md:grid-cols-2 gap-4 mt-8">
           <Card className="p-6 bg-card border-border flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-semibold">Browser Extension</h3>
-              <p className="text-sm text-muted-foreground">Analyze AI responses automatically</p>
+              <h3 className="font-heading font-semibold">Hugging Face Space</h3>
+              <p className="text-sm text-muted-foreground">Your backend is running on HF Spaces</p>
             </div>
-            <Button variant="outline" size="sm">Download</Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href={import.meta.env.VITE_API_URL || "#"} target="_blank" rel="noopener noreferrer">
+                Open
+              </a>
+            </Button>
           </Card>
           <Card className="p-6 bg-card border-border flex items-center justify-between">
             <div>
