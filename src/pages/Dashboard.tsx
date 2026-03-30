@@ -50,8 +50,12 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f12] relative">
-      <div className="absolute top-0 left-1/3 w-[600px] h-[400px] rounded-full bg-[#d63384]/6 blur-[160px] pointer-events-none" />
+    <div className="min-h-screen relative" style={{ background: "linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 30%, #120820 60%, #0f0f12 100%)" }}>
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-20 -left-20 w-[700px] h-[600px] rounded-full bg-[#c47a2a]/15 blur-[180px]" />
+        <div className="absolute top-[10%] left-[30%] w-[600px] h-[500px] rounded-full bg-primary/20 blur-[160px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[300px] rounded-full bg-[#1a0a2e]/80 blur-[100px]" />
+      </div>
 
       <Navbar />
       <div className="container mx-auto pt-28 pb-16 px-4 relative z-10">
