@@ -149,7 +149,7 @@ export interface HistoryResponse {
  */
 export async function analyzeTextWithBackend(
   text:    string,
-  profile: "student" | "professor" = "student"
+  profile: string = "student"
 ): Promise<AnalysisResponse> {
   const response = await fetch(`${API_BASE}/api/analyze`, {
     method:  "POST",
