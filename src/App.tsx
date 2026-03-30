@@ -6,9 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Landing from "./pages/Landing";
 import Demo from "./pages/Demo";
 import Dashboard from "./pages/Dashboard";
-import History from "./pages/History";
-import Docs from "./pages/Docs";
-import SettingsPage from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,13 +17,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/demo" element={<Demo />} />
+          <Route path="/"          element={<Landing />} />
+          <Route path="/demo"      element={<Demo />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*"          element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
