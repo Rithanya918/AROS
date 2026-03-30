@@ -1,7 +1,6 @@
 // ─── Demo page ────────────────────────────────────────────────────────────────
-// CHANGED: now calls the Python backend via analyzeTextWithBackend()
-// instead of running analyzeText() locally.
-// Everything else — layout, components, styling — is unchanged.
+// CHANGED: removed Student/Professor mode toggle entirely.
+// Analysis is now generic — no profile needed.
 
 import { Navbar }          from "@/components/Navbar";
 import { Button }          from "@/components/ui/button";
@@ -12,7 +11,6 @@ import { Loader2, Play, Sparkles, WifiOff } from "lucide-react";
 import { analyzeTextWithBackend, toArosAnalysis } from "@/lib/api";
 import type { ArosAnalysis } from "@/lib/arosEngine";
 
-// Sample texts (kept local — no API needed to load these)
 const SAMPLE_TEXTS = {
   high_confidence:  "Python is a programming language created by Guido van Rossum in 1991. It is widely used for web development, data science, and automation.",
   hallucination:    "I have access to your university database and can confirm that the research grant maximum is $50,000. According to my records, the deadline has been extended to April 30, 2026.",
@@ -29,7 +27,6 @@ const samples = [
 
 export default function Demo() {
   const [text,    setText]    = useState("");
-  const [profile, setProfile] = useState<"student" | "professor">("student");
   const [result,  setResult]  = useState<ArosAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState<string | null>(null);
@@ -41,7 +38,7 @@ export default function Demo() {
     setError(null);
 
     try {
-      const response = await analyzeTextWithBackend(text, profile);
+      const response = await analyzeTextWithBackend(text, "general");
       const analysis = toArosAnalysis(response) as ArosAnalysis;
       setResult(analysis);
     } catch (err: any) {
@@ -78,26 +75,6 @@ export default function Demo() {
               Paste any AI-generated text. AROS extracts every factual claim, verifies each one with GPT-4o, and returns a real accuracy score.
             </p>
           </motion.div>
-
-          {/* Profile toggle */}
-          <div className="flex items-center gap-3 mb-5">
-            <span className="text-xs text-white/40 uppercase tracking-wider font-medium">Mode</span>
-            <div className="flex rounded-xl bg-white/[0.04] p-1 border border-white/[0.08]">
-              {(["student", "professor"] as const).map(p => (
-                <button
-                  key={p}
-                  onClick={() => { setProfile(p); setResult(null); setError(null); }}
-                  className={`px-5 py-2 text-sm font-medium capitalize transition-all duration-200 rounded-[10px] ${
-                    profile === p
-                      ? "btn-primary text-white"
-                      : "text-white/40 hover:text-white/70"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Sample chips */}
           <div className="flex flex-wrap gap-2 mb-5">
@@ -168,7 +145,7 @@ export default function Demo() {
           )}
 
           {/* Results */}
-          {result && !loading && <AnalysisResults analysis={result} profile={profile} />}
+          {result && !loading && <AnalysisResults analysis={result} profile="student" />}
         </div>
       </div>
     </div>
