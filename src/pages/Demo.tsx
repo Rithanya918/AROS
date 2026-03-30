@@ -1,7 +1,3 @@
-// ─── Demo page ────────────────────────────────────────────────────────────────
-// CHANGED: removed Student/Professor mode toggle entirely.
-// Analysis is now generic — no profile needed.
-
 import { Navbar }          from "@/components/Navbar";
 import { Button }          from "@/components/ui/button";
 import { AnalysisResults } from "@/components/AnalysisResults";
@@ -36,9 +32,8 @@ export default function Demo() {
     setLoading(true);
     setResult(null);
     setError(null);
-
     try {
-      const response = await analyzeTextWithBackend(text, "general");
+      const response = await analyzeTextWithBackend(text);
       const analysis = toArosAnalysis(response) as ArosAnalysis;
       setResult(analysis);
     } catch (err: any) {
@@ -60,9 +55,7 @@ export default function Demo() {
 
   return (
     <div className="min-h-screen bg-[#0f0f12] relative">
-      {/* Background glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#d63384]/6 blur-[140px] pointer-events-none" />
-
       <Navbar />
       <div className="container mx-auto pt-28 pb-16 px-4 relative z-10">
         <div className="max-w-3xl mx-auto">
@@ -76,7 +69,6 @@ export default function Demo() {
             </p>
           </motion.div>
 
-          {/* Sample chips */}
           <div className="flex flex-wrap gap-2 mb-5">
             {samples.map(s => (
               <button
@@ -89,7 +81,6 @@ export default function Demo() {
             ))}
           </div>
 
-          {/* Input card */}
           <div className="glass-card p-1 mb-6">
             <textarea
               value={text}
@@ -115,7 +106,6 @@ export default function Demo() {
             </div>
           </div>
 
-          {/* Error state */}
           {error && (
             <div className="glass-card p-5 !border-[#ef4444]/20 !bg-[#ef4444]/5 mb-6">
               <div className="flex items-start gap-3">
@@ -123,15 +113,11 @@ export default function Demo() {
                 <div>
                   <p className="text-sm font-medium text-[#ef4444] mb-1">Backend unreachable</p>
                   <p className="text-xs text-white/40">{error}</p>
-                  <p className="text-xs text-white/40 mt-1">
-                    Add <code className="bg-white/[0.06] px-1.5 py-0.5 rounded text-[#ff4da6]">VITE_API_URL=https://your-hf-space.hf.space</code> to your <code className="bg-white/[0.06] px-1.5 py-0.5 rounded">.env</code> file.
-                  </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Loading */}
           {loading && (
             <div className="text-center py-16">
               <div className="inline-flex items-center gap-3 text-white/50">
@@ -144,7 +130,6 @@ export default function Demo() {
             </div>
           )}
 
-          {/* Results */}
           {result && !loading && <AnalysisResults analysis={result} profile="student" />}
         </div>
       </div>
