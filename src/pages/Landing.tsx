@@ -15,7 +15,7 @@ import logoGrok from "@/assets/logo-grok.png";
 const features = [
   { icon: Zap, title: "Real-Time Verification", desc: "Analyze AI responses instantly as they appear" },
   { icon: BarChart3, title: "Confidence Scoring", desc: "0-100 reliability scores with detailed breakdowns" },
-  { icon: Users, title: "Dual User Modes", desc: "Tailored views for students and professors" },
+  { icon: Users, title: "Works Everywhere", desc: "Tailored for professionals, researchers, and teams" },
   { icon: Shield, title: "Hallucination Detection", desc: "Catch AI fabrications before they cause harm" },
 ];
 
@@ -27,7 +27,7 @@ const steps = [
 ];
 
 const partnerLogos = [
-  "OpenAI", "Anthropic", "DeepMind", "Hugging Face", "Cohere",
+  "ChatGPT", "Claude", "Gemini", "Perplexity", "Copilot", "Grok", "Cursor",
 ];
 
 // AI platform logos with brand colors
@@ -171,7 +171,7 @@ export default function Landing() {
 
               <p className="text-lg md:text-xl text-white/50 max-w-xl mb-10 leading-relaxed">
                 Real-time fact-checking, confidence scoring, and hallucination detection
-                for every AI response. Protect your research, your students, your decisions.
+                for every AI response. Protect your work, your reputation, your decisions.
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
@@ -181,9 +181,9 @@ export default function Landing() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link to="/docs">
+                <Link to="/dashboard">
                   <Button size="lg" variant="ghost" className="text-white/60 hover:text-white hover:bg-transparent px-8 h-13 text-base">
-                    Read the Docs
+                    View Dashboard
                   </Button>
                 </Link>
               </div>
@@ -217,9 +217,9 @@ export default function Landing() {
       <section className="py-24 px-4 relative z-10">
         <div className="container mx-auto">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4 text-white">
-            Built for <span className="text-gradient">Academic Integrity</span>
+            Built for <span className="text-gradient">Every Professional</span>
           </h2>
-          <p className="text-center text-white/40 mb-14 max-w-lg mx-auto">Everything you need to verify AI-generated content with confidence.</p>
+          <p className="text-center text-white/40 mb-14 max-w-lg mx-auto">Everything you need to verify AI-generated content — wherever you work.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((f, i) => (
               <motion.div
@@ -300,7 +300,7 @@ export default function Landing() {
             <span>© 2026</span>
           </div>
           <div className="flex gap-6">
-            <Link to="/docs" className="hover:text-white transition-colors">Docs</Link>
+            <Link to="/demo" className="hover:text-white transition-colors">Demo</Link>
             <Link to="/demo" className="hover:text-white transition-colors">Demo</Link>
           </div>
         </div>
