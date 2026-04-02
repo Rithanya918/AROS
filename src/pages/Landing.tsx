@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Shield, Zap, BarChart3, Users, ArrowRight, CheckCircle } from "lucide-react";
+import { Shield, Zap, BarChart3, Users, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const features = [
@@ -22,43 +22,51 @@ const partnerLogos = [
   "OpenAI", "Anthropic", "DeepMind", "Hugging Face", "Cohere",
 ];
 
-// Orbital items for the animated graphic
-const orbitItems = [
-  { icon: Shield, size: 44, orbit: 1, angle: 0 },
-  { icon: Zap, size: 40, orbit: 1, angle: 72 },
-  { icon: BarChart3, size: 42, orbit: 1, angle: 144 },
-  { icon: Users, size: 38, orbit: 1, angle: 216 },
-  { icon: CheckCircle, size: 40, orbit: 1, angle: 288 },
-  { icon: Shield, size: 36, orbit: 2, angle: 30 },
-  { icon: Zap, size: 34, orbit: 2, angle: 120 },
-  { icon: BarChart3, size: 38, orbit: 2, angle: 210 },
-  { icon: Users, size: 36, orbit: 2, angle: 300 },
+// AI platform logos with brand colors
+const aiPlatforms = [
+  // Inner ring
+  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 0, ring: 1 },
+  { name: "Claude", color: "#d4a574", letter: "C", angle: 90, ring: 1 },
+  { name: "Gemini", color: "#4285f4", letter: "G", angle: 180, ring: 1 },
+  { name: "Perplexity", color: "#20b8cd", letter: "P", angle: 270, ring: 1 },
+  // Outer ring
+  { name: "Cursor", color: "#7c3aed", letter: "Cu", angle: 0, ring: 2 },
+  { name: "Copilot", color: "#0078d4", letter: "Co", angle: 72, ring: 2 },
+  { name: "Grok", color: "#ef4444", letter: "X", angle: 144, ring: 2 },
+  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 216, ring: 2 },
+  { name: "Claude", color: "#d4a574", letter: "C", angle: 288, ring: 2 },
 ];
 
 function OrbitalGraphic() {
-  const innerRadius = 120;
-  const outerRadius = 200;
+  const innerRadius = 110;
+  const outerRadius = 185;
+
+  const innerItems = aiPlatforms.filter(p => p.ring === 1);
+  const outerItems = aiPlatforms.filter(p => p.ring === 2);
 
   return (
     <div className="relative w-[500px] h-[500px] flex items-center justify-center">
       {/* Orbit rings */}
-      <div className="absolute w-[280px] h-[280px] rounded-full border border-white/[0.08]" />
-      <div className="absolute w-[440px] h-[440px] rounded-full border border-white/[0.06]" />
+      <div className="absolute w-[260px] h-[260px] rounded-full border border-white/[0.08]" />
+      <div className="absolute w-[410px] h-[410px] rounded-full border border-white/[0.06]" />
+      <div className="absolute w-[480px] h-[480px] rounded-full border border-white/[0.04]" />
 
-      {/* Center stat */}
-      <div className="relative z-10 text-center">
-        <div className="text-5xl font-heading font-bold text-white">20k+</div>
-        <div className="text-sm text-white/50 mt-1">Analyses Run</div>
+      {/* Center — glowing AROS shield */}
+      <div className="relative z-10 flex items-center justify-center">
+        <div className="absolute w-20 h-20 rounded-full bg-primary/40 blur-[30px]" />
+        <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/60 border border-white/20 flex items-center justify-center shadow-lg shadow-primary/30">
+          <Shield className="h-8 w-8 text-white" />
+        </div>
       </div>
 
-      {/* Inner orbit items */}
+      {/* Inner orbit — clockwise */}
       <motion.div
-        className="absolute w-[280px] h-[280px]"
+        className="absolute w-[260px] h-[260px]"
         animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
       >
-        {orbitItems.slice(0, 5).map((item, i) => {
-          const rad = (item.angle * Math.PI) / 180;
+        {innerItems.map((platform, i) => {
+          const rad = (platform.angle * Math.PI) / 180;
           const x = Math.cos(rad) * innerRadius;
           const y = Math.sin(rad) * innerRadius;
           return (
@@ -67,24 +75,32 @@ function OrbitalGraphic() {
               className="absolute left-1/2 top-1/2"
               style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
               animate={{ rotate: -360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
             >
-              <div className="rounded-xl bg-white/[0.08] backdrop-blur-sm border border-white/[0.12] p-2.5 shadow-lg shadow-black/20">
-                <item.icon className="h-4 w-4 text-white/80" />
+              <div
+                className="w-11 h-11 rounded-xl backdrop-blur-sm border border-white/[0.15] flex items-center justify-center shadow-lg shadow-black/30 text-sm font-bold text-white"
+                style={{ background: `linear-gradient(135deg, ${platform.color}cc, ${platform.color}66)` }}
+              >
+                {platform.letter}
+              </div>
+              <div
+                className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-medium whitespace-nowrap opacity-60 text-white"
+              >
+                {platform.name}
               </div>
             </motion.div>
           );
         })}
       </motion.div>
 
-      {/* Outer orbit items */}
+      {/* Outer orbit — counter-clockwise */}
       <motion.div
-        className="absolute w-[440px] h-[440px]"
+        className="absolute w-[410px] h-[410px]"
         animate={{ rotate: -360 }}
-        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       >
-        {orbitItems.slice(5).map((item, i) => {
-          const rad = (item.angle * Math.PI) / 180;
+        {outerItems.map((platform, i) => {
+          const rad = (platform.angle * Math.PI) / 180;
           const x = Math.cos(rad) * outerRadius;
           const y = Math.sin(rad) * outerRadius;
           return (
@@ -93,19 +109,22 @@ function OrbitalGraphic() {
               className="absolute left-1/2 top-1/2"
               style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
               animate={{ rotate: 360 }}
-              transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/10 border border-white/[0.12] flex items-center justify-center backdrop-blur-sm">
-                <item.icon className="h-3.5 w-3.5 text-white/70" />
+              <div
+                className="w-9 h-9 rounded-full backdrop-blur-sm border border-white/[0.12] flex items-center justify-center shadow-lg shadow-black/20 text-xs font-bold text-white"
+                style={{ background: `linear-gradient(135deg, ${platform.color}aa, ${platform.color}44)` }}
+              >
+                {platform.letter}
               </div>
             </motion.div>
           );
         })}
       </motion.div>
 
-      {/* Glow effects around orbital */}
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-primary/20 blur-[80px]" />
-      <div className="absolute w-[350px] h-[350px] rounded-full bg-primary/5 blur-[100px]" />
+      {/* Glow effects */}
+      <div className="absolute w-[200px] h-[200px] rounded-full bg-primary/25 blur-[80px]" />
+      <div className="absolute w-[350px] h-[350px] rounded-full bg-primary/8 blur-[100px]" />
     </div>
   );
 }
