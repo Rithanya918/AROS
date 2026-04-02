@@ -42,7 +42,9 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <Link to="/demo">
-            <Button variant="ghost" size="sm" className="text-white/60 hover:text-white hover:bg-white/[0.06]">Try Demo</Button>
+            <Button variant="ghost" size="sm" className="text-white/60 hover:text-white hover:bg-white/[0.06]">
+              Try Demo
+            </Button>
           </Link>
           <Link to="/dashboard">
             <Button size="sm" className="btn-primary border-0 px-5">
