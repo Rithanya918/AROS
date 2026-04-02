@@ -87,13 +87,10 @@ function OrbitalGraphic() {
               transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
             >
               <div
-                className="w-11 h-11 rounded-xl backdrop-blur-sm border border-white/[0.15] flex items-center justify-center shadow-lg shadow-black/30 text-sm font-bold text-white"
+                className="w-11 h-11 rounded-xl backdrop-blur-sm border border-white/[0.15] flex items-center justify-center shadow-lg shadow-black/30 overflow-hidden"
                 style={{ background: `linear-gradient(135deg, ${platform.color}cc, ${platform.color}66)` }}
               >
-                {platform.letter}
-              </div>
-              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-medium whitespace-nowrap opacity-60 text-white">
-                {platform.name}
+                <img src={platform.logo} alt={platform.name} className="w-7 h-7 object-contain" />
               </div>
             </motion.div>
           );
