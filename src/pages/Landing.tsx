@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 import { Shield, Zap, BarChart3, Users, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
+import logoChatgpt from "@/assets/logo-chatgpt.png";
+import logoClaude from "@/assets/logo-claude.png";
+import logoGemini from "@/assets/logo-gemini.png";
+import logoPerplexity from "@/assets/logo-perplexity.png";
+import logoCursor from "@/assets/logo-cursor.png";
+import logoCopilot from "@/assets/logo-copilot.png";
+import logoGrok from "@/assets/logo-grok.png";
+
 const features = [
   { icon: Zap, title: "Real-Time Verification", desc: "Analyze AI responses instantly as they appear" },
   { icon: BarChart3, title: "Confidence Scoring", desc: "0-100 reliability scores with detailed breakdowns" },
@@ -25,16 +33,16 @@ const partnerLogos = [
 // AI platform logos with brand colors
 const aiPlatforms = [
   // Inner ring
-  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 0, ring: 1 },
-  { name: "Claude", color: "#d4a574", letter: "C", angle: 90, ring: 1 },
-  { name: "Gemini", color: "#4285f4", letter: "G", angle: 180, ring: 1 },
-  { name: "Perplexity", color: "#20b8cd", letter: "P", angle: 270, ring: 1 },
+  { name: "ChatGPT", color: "#10a37f", logo: logoChatgpt, angle: 0, ring: 1 },
+  { name: "Claude", color: "#d4a574", logo: logoClaude, angle: 90, ring: 1 },
+  { name: "Gemini", color: "#4285f4", logo: logoGemini, angle: 180, ring: 1 },
+  { name: "Perplexity", color: "#20b8cd", logo: logoPerplexity, angle: 270, ring: 1 },
   // Outer ring
-  { name: "Cursor", color: "#7c3aed", letter: "Cu", angle: 0, ring: 2 },
-  { name: "Copilot", color: "#0078d4", letter: "Co", angle: 72, ring: 2 },
-  { name: "Grok", color: "#ef4444", letter: "X", angle: 144, ring: 2 },
-  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 216, ring: 2 },
-  { name: "Claude", color: "#d4a574", letter: "C", angle: 288, ring: 2 },
+  { name: "Cursor", color: "#7c3aed", logo: logoCursor, angle: 0, ring: 2 },
+  { name: "Copilot", color: "#0078d4", logo: logoCopilot, angle: 72, ring: 2 },
+  { name: "Grok", color: "#ef4444", logo: logoGrok, angle: 144, ring: 2 },
+  { name: "ChatGPT", color: "#10a37f", logo: logoChatgpt, angle: 216, ring: 2 },
+  { name: "Claude", color: "#d4a574", logo: logoClaude, angle: 288, ring: 2 },
 ];
 
 function OrbitalGraphic() {
