@@ -38,11 +38,12 @@ const aiPlatforms = [
 ];
 
 function OrbitalGraphic() {
-  const innerRadius = 110;
-  const outerRadius = 185;
+  const ring1Radius = 130; // matches 260px diameter ring
+  const ring2Radius = 205; // matches 410px diameter ring
+  const ring3Radius = 240; // matches 480px diameter ring
 
-  const innerItems = aiPlatforms.filter(p => p.ring === 1);
-  const outerItems = aiPlatforms.filter(p => p.ring === 2);
+  const ring1Items = aiPlatforms.filter(p => p.ring === 1);
+  const ring2Items = aiPlatforms.filter(p => p.ring === 2);
 
   return (
     <div className="relative w-[500px] h-[500px] flex items-center justify-center">
@@ -59,21 +60,21 @@ function OrbitalGraphic() {
         </div>
       </div>
 
-      {/* Inner orbit — clockwise */}
+      {/* Ring 1 — clockwise */}
       <motion.div
-        className="absolute w-[260px] h-[260px]"
+        className="absolute inset-0"
         animate={{ rotate: 360 }}
         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
       >
-        {innerItems.map((platform, i) => {
+        {ring1Items.map((platform, i) => {
           const rad = (platform.angle * Math.PI) / 180;
-          const x = Math.cos(rad) * innerRadius;
-          const y = Math.sin(rad) * innerRadius;
+          const x = 250 + Math.cos(rad) * ring1Radius;
+          const y = 250 + Math.sin(rad) * ring1Radius;
           return (
             <motion.div
-              key={`inner-${i}`}
-              className="absolute left-1/2 top-1/2"
-              style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
+              key={`r1-${i}`}
+              className="absolute"
+              style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
               animate={{ rotate: -360 }}
               transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
             >
@@ -83,9 +84,7 @@ function OrbitalGraphic() {
               >
                 {platform.letter}
               </div>
-              <div
-                className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-medium whitespace-nowrap opacity-60 text-white"
-              >
+              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-medium whitespace-nowrap opacity-60 text-white">
                 {platform.name}
               </div>
             </motion.div>
@@ -93,21 +92,21 @@ function OrbitalGraphic() {
         })}
       </motion.div>
 
-      {/* Outer orbit — counter-clockwise */}
+      {/* Ring 2 — counter-clockwise */}
       <motion.div
-        className="absolute w-[410px] h-[410px]"
+        className="absolute inset-0"
         animate={{ rotate: -360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       >
-        {outerItems.map((platform, i) => {
+        {ring2Items.map((platform, i) => {
           const rad = (platform.angle * Math.PI) / 180;
-          const x = Math.cos(rad) * outerRadius;
-          const y = Math.sin(rad) * outerRadius;
+          const x = 250 + Math.cos(rad) * ring2Radius;
+          const y = 250 + Math.sin(rad) * ring2Radius;
           return (
             <motion.div
-              key={`outer-${i}`}
-              className="absolute left-1/2 top-1/2"
-              style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
+              key={`r2-${i}`}
+              className="absolute"
+              style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
               animate={{ rotate: 360 }}
               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
             >
