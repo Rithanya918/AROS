@@ -116,10 +116,10 @@ function OrbitalGraphic() {
               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
             >
               <div
-                className="w-9 h-9 rounded-full backdrop-blur-sm border border-white/[0.12] flex items-center justify-center shadow-lg shadow-black/20 text-xs font-bold text-white"
+                className="w-9 h-9 rounded-full backdrop-blur-sm border border-white/[0.12] flex items-center justify-center shadow-lg shadow-black/20 overflow-hidden"
                 style={{ background: `linear-gradient(135deg, ${platform.color}aa, ${platform.color}44)` }}
               >
-                {platform.letter}
+                <img src={platform.logo} alt={platform.name} className="w-6 h-6 object-contain" />
               </div>
             </motion.div>
           );
