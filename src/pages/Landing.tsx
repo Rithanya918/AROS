@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 import { Shield, Zap, BarChart3, Users, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
+import logoChatgpt from "@/assets/logo-chatgpt.png";
+import logoClaude from "@/assets/logo-claude.png";
+import logoGemini from "@/assets/logo-gemini.png";
+import logoPerplexity from "@/assets/logo-perplexity.png";
+import logoCursor from "@/assets/logo-cursor.png";
+import logoCopilot from "@/assets/logo-copilot.png";
+import logoGrok from "@/assets/logo-grok.png";
+
 const features = [
   { icon: Zap, title: "Real-Time Verification", desc: "Analyze AI responses instantly as they appear" },
   { icon: BarChart3, title: "Confidence Scoring", desc: "0-100 reliability scores with detailed breakdowns" },
@@ -25,16 +33,16 @@ const partnerLogos = [
 // AI platform logos with brand colors
 const aiPlatforms = [
   // Inner ring
-  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 0, ring: 1 },
-  { name: "Claude", color: "#d4a574", letter: "C", angle: 90, ring: 1 },
-  { name: "Gemini", color: "#4285f4", letter: "G", angle: 180, ring: 1 },
-  { name: "Perplexity", color: "#20b8cd", letter: "P", angle: 270, ring: 1 },
+  { name: "ChatGPT", color: "#10a37f", logo: logoChatgpt, angle: 0, ring: 1 },
+  { name: "Claude", color: "#d4a574", logo: logoClaude, angle: 90, ring: 1 },
+  { name: "Gemini", color: "#4285f4", logo: logoGemini, angle: 180, ring: 1 },
+  { name: "Perplexity", color: "#20b8cd", logo: logoPerplexity, angle: 270, ring: 1 },
   // Outer ring
-  { name: "Cursor", color: "#7c3aed", letter: "Cu", angle: 0, ring: 2 },
-  { name: "Copilot", color: "#0078d4", letter: "Co", angle: 72, ring: 2 },
-  { name: "Grok", color: "#ef4444", letter: "X", angle: 144, ring: 2 },
-  { name: "ChatGPT", color: "#10a37f", letter: "G", angle: 216, ring: 2 },
-  { name: "Claude", color: "#d4a574", letter: "C", angle: 288, ring: 2 },
+  { name: "Cursor", color: "#7c3aed", logo: logoCursor, angle: 0, ring: 2 },
+  { name: "Copilot", color: "#0078d4", logo: logoCopilot, angle: 72, ring: 2 },
+  { name: "Grok", color: "#ef4444", logo: logoGrok, angle: 144, ring: 2 },
+  { name: "ChatGPT", color: "#10a37f", logo: logoChatgpt, angle: 216, ring: 2 },
+  { name: "Claude", color: "#d4a574", logo: logoClaude, angle: 288, ring: 2 },
 ];
 
 function OrbitalGraphic() {
@@ -79,13 +87,10 @@ function OrbitalGraphic() {
               transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
             >
               <div
-                className="w-11 h-11 rounded-xl backdrop-blur-sm border border-white/[0.15] flex items-center justify-center shadow-lg shadow-black/30 text-sm font-bold text-white"
+                className="w-11 h-11 rounded-xl backdrop-blur-sm border border-white/[0.15] flex items-center justify-center shadow-lg shadow-black/30 overflow-hidden"
                 style={{ background: `linear-gradient(135deg, ${platform.color}cc, ${platform.color}66)` }}
               >
-                {platform.letter}
-              </div>
-              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-medium whitespace-nowrap opacity-60 text-white">
-                {platform.name}
+                <img src={platform.logo} alt={platform.name} className="w-7 h-7 object-contain" />
               </div>
             </motion.div>
           );
@@ -111,10 +116,10 @@ function OrbitalGraphic() {
               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
             >
               <div
-                className="w-9 h-9 rounded-full backdrop-blur-sm border border-white/[0.12] flex items-center justify-center shadow-lg shadow-black/20 text-xs font-bold text-white"
+                className="w-9 h-9 rounded-full backdrop-blur-sm border border-white/[0.12] flex items-center justify-center shadow-lg shadow-black/20 overflow-hidden"
                 style={{ background: `linear-gradient(135deg, ${platform.color}aa, ${platform.color}44)` }}
               >
-                {platform.letter}
+                <img src={platform.logo} alt={platform.name} className="w-6 h-6 object-contain" />
               </div>
             </motion.div>
           );
