@@ -136,16 +136,16 @@ function OrbitalGraphic() {
 export default function Landing() {
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
-      background: "linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 30%, #120820 60%, #0f0f12 100%)"
+      background: "linear-gradient(135deg, #e8346c 0%, #f06060 30%, #f5834a 60%, #f9c972 100%)"
     }}>
       <Navbar />
 
-      {/* Background glows — warm orange top-left, purple center */}
+      {/* Background glows — pink left, orange right */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-[700px] h-[600px] rounded-full bg-[#c47a2a]/15 blur-[180px]" />
-        <div className="absolute top-[10%] left-[30%] w-[600px] h-[500px] rounded-full bg-primary/20 blur-[160px]" />
-        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[140px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[300px] rounded-full bg-[#1a0a2e]/80 blur-[100px]" />
+        <div className="absolute -top-20 -left-20 w-[700px] h-[600px] rounded-full bg-[#d4276a]/40 blur-[180px]" />
+        <div className="absolute top-[10%] left-[30%] w-[600px] h-[500px] rounded-full bg-[#f06080]/30 blur-[160px]" />
+        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-[#f5a040]/20 blur-[140px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[300px] rounded-full bg-[#f9c972]/30 blur-[100px]" />
       </div>
 
       {/* Hero — two-column layout */}
