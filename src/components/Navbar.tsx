@@ -14,7 +14,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f0f12]/80 backdrop-blur-2xl border-b border-white/[0.06]">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#e8346c]/60 backdrop-blur-2xl border-b border-white/[0.12]">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="btn-primary rounded-xl p-2 transition-transform group-hover:scale-105">
@@ -61,7 +61,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-white/[0.06] bg-[#0f0f12]/95 backdrop-blur-2xl px-4 py-4 space-y-1">
+        <div className="md:hidden border-t border-white/[0.12] bg-[#e8346c]/90 backdrop-blur-2xl px-4 py-4 space-y-1">
           {navItems.map(item => (
             <Link
               key={item.path}
