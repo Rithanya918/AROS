@@ -62,9 +62,9 @@ function OrbitalGraphic() {
 
       {/* Center — glowing AROS shield */}
       <div className="relative z-10 flex items-center justify-center">
-        <div className="absolute w-20 h-20 rounded-full bg-primary/40 blur-[30px]" />
-        <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/60 border border-white/20 flex items-center justify-center shadow-lg shadow-primary/30">
-          <Shield className="h-8 w-8 text-white" />
+        <div className="absolute w-20 h-20 rounded-full bg-white/30 blur-[30px]" />
+        <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-white to-white/60 border border-white/40 flex items-center justify-center shadow-lg shadow-white/20">
+          <Shield className="h-8 w-8 text-primary" />
         </div>
       </div>
 
@@ -127,8 +127,8 @@ function OrbitalGraphic() {
       </motion.div>
 
       {/* Glow effects */}
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-primary/25 blur-[80px]" />
-      <div className="absolute w-[350px] h-[350px] rounded-full bg-primary/8 blur-[100px]" />
+      <div className="absolute w-[200px] h-[200px] rounded-full bg-white/15 blur-[80px]" />
+      <div className="absolute w-[350px] h-[350px] rounded-full bg-white/5 blur-[100px]" />
     </div>
   );
 }
