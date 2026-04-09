@@ -166,7 +166,7 @@ export default function Landing() {
 
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-0.02em] mb-6 leading-[1.05] text-white">
                 Catch AI Hallucinations{" "}
-                <span className="text-gradient">Before They Catch You</span>
+                <span style={{ color: '#f0c050' }}>Before They Catch You</span>
               </h1>
 
               <p className="text-lg md:text-xl text-white/50 max-w-xl mb-10 leading-relaxed">
@@ -259,7 +259,7 @@ export default function Landing() {
               >
                 <div className="text-5xl font-heading font-bold text-gradient mb-4">{s.num}</div>
                 <h3 className="font-heading font-semibold mb-2 text-white">{s.title}</h3>
-                <p className="text-sm text-white/40 leading-relaxed">{s.desc}</p>
+                <p className="text-base text-white/40 leading-relaxed">{s.desc}</p>
               </motion.div>
             ))}
           </div>
