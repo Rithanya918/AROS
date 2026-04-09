@@ -169,7 +169,7 @@ export default function Landing() {
                 <span style={{ color: '#f0c050' }}>Before They Catch You</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-white/50 max-w-xl mb-10 leading-relaxed">
+              <p className="text-lg md:text-xl text-white max-w-xl mb-10 leading-relaxed">
                 Real-time fact-checking, confidence scoring, and hallucination detection
                 for every AI response. Protect your work, your reputation, your decisions.
               </p>
@@ -206,7 +206,7 @@ export default function Landing() {
       <section className="relative z-10 border-t border-white/[0.06] py-8 px-4">
         <div className="container mx-auto flex flex-wrap items-center justify-center gap-10 md:gap-16">
           {partnerLogos.map((name) => (
-            <span key={name} className="text-white/20 font-heading font-semibold text-sm tracking-widest uppercase">
+            <span key={name} className="text-white font-heading font-semibold text-sm tracking-widest uppercase">
               {name}
             </span>
           ))}
