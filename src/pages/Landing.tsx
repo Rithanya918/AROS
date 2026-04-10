@@ -160,7 +160,7 @@ export default function Landing() {
               className="text-left"
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-4xl text-primary-foreground/70 mb-8 backdrop-blur-sm">
-                <Shield className="h-4 w-4" />
+              
                 AI Reliability Overlay System
               </div>
 
