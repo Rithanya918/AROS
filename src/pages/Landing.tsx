@@ -159,7 +159,7 @@ export default function Landing() {
               transition={{ duration: 0.8 }}
               className="text-left"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-xl text-primary-foreground/70 mb-8 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-2xl text-primary-foreground/70 mb-8 backdrop-blur-sm">
                 <Shield className="h-4 w-4" />
                 AI Reliability Overlay System
               </div>
