@@ -66,10 +66,10 @@ export default function Demo() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
             <h1 className="font-heading text-4xl font-bold mb-3 text-white tracking-[-0.02em]">
               <Sparkles className="inline h-8 w-8 text-[#ff4da6] mr-2" />
-              Live Analysis Demo
+              AROS Fact Checker
             </h1>
             <p className="text-white/40 text-lg">
-              Paste any AI-generated text. AROS extracts every factual claim, verifies each one with GPT-4o, and returns a real accuracy score.
+              Paste any AI-generated text. AROS extracts every factual claim, verifies each one, and returns a real accuracy score.
             </p>
           </motion.div>
 
