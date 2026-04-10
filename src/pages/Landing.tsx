@@ -229,7 +229,7 @@ export default function Landing() {
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                <div className="glass-card p-6 h-full hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 group">
+                <div className="glass-card p-6 h-full hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 group bg-white">
                   <div className="bg-primary rounded-xl p-2.5 w-fit mb-5 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
                     <f.icon className="h-5 w-5 text-primary-foreground" />
                   </div>
