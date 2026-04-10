@@ -159,7 +159,7 @@ export default function Landing() {
               transition={{ duration: 0.8 }}
               className="text-left"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm text-primary-foreground/70 mb-8 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-xl text-primary-foreground/70 mb-8 backdrop-blur-sm">
                 <Shield className="h-4 w-4" />
                 AI Reliability Overlay System
               </div>
@@ -219,7 +219,7 @@ export default function Landing() {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4 text-white">
             Built for <span className="text-gradient">Every Professional</span>
           </h2>
-          <p className="text-center text-white/80 mb-14 max-w-lg mx-auto">Everything you need to verify AI-generated content — wherever you work.</p>
+          <p className="text-center text-white/80 mb-14 max-w-lg mx-auto">Everything you need to verify AI-generated content wherever you work.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((f, i) => (
               <motion.div
