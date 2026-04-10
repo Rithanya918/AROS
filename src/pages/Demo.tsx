@@ -85,15 +85,15 @@ export default function Demo() {
             ))}
           </div>
 
-          <div className="glass-card p-1 mb-6">
+          <div className="glass-card p-1 mb-6 bg-white">
             <textarea
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Paste AI-generated text here..."
-              className="w-full min-h-[180px] bg-transparent p-5 text-sm text-white placeholder:text-white/20 resize-y focus:outline-none"
+              className="w-full min-h-[180px] bg-transparent p-5 text-sm text-gray-800 placeholder:text-gray-400 resize-y focus:outline-none"
             />
             <div className="flex items-center justify-between px-5 pb-4">
-              <span className="text-xs text-white/30">
+              <span className="text-xs text-gray-400">
                 {text.split(/\s+/).filter(Boolean).length} words
               </span>
               <Button
