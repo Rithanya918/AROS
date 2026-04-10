@@ -233,8 +233,8 @@ export default function Landing() {
                   <div className="bg-primary rounded-xl p-2.5 w-fit mb-5 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
                     <f.icon className="h-5 w-5 text-primary-foreground" />
                   </div>
-                  <h3 className="font-heading font-semibold text-lg mb-2 text-white">{f.title}</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">{f.desc}</p>
+                  <h3 className="font-heading font-semibold text-lg mb-2 text-primary">{f.title}</h3>
+                  <p className="text-sm text-primary/80 leading-relaxed">{f.desc}</p>
                 </div>
               </motion.div>
             ))}
